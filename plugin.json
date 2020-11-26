@@ -4,6 +4,6 @@
     "provider": "Botble\\PageBuilder\\Providers\\PageBuilderServiceProvider",
     "author": "Sang Nguyen",
     "url": "https://sangnguyen.info",
-    "version": "5.4",
+    "version": "5.7",
     "description": "Drag and drop website editor. No coding needed."
 }

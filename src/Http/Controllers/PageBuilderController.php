@@ -37,7 +37,7 @@ class PageBuilderController extends BaseController
     {
         $page = $this->pageRepository->findOrFail($id);
 
-        $theme = Theme::uses($settingStore->get('theme'))->layout($settingStore->get('layout', 'default'));
+        $theme = Theme::uses(Theme::getThemeName())->layout($settingStore->get('layout', 'default'));
 
         // Fire event global assets.
         $theme->fire('asset', $asset);
