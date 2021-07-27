@@ -23,6 +23,7 @@
         }
         .button-option-save, .button-option-cancel {
             font-size : 14px;
+            text-transform: capitalize;
         }
 
         .button-option-save:before, .button-option-cancel:before {
@@ -59,11 +60,80 @@
             user-select         : none;
             -webkit-user-select : none;
         }
+        .gjs-logo {
+            height: 25px;
+        }
+        .gjs-logo-version {
+           background-color: #756467;
+        }
+        .gjs-logo-cont {
+            position: absolute;
+            display: inline-block;
+            top: 7px;
+        }
+        .gjs-logo-version {
+            position: absolute;
+            font-size: 10px;
+            padding: 1px 7px;
+            border-radius: 15px;
+            bottom: 2px;
+            right: -43px;
+        }
+        .gjs-mdl-dialog-sm {
+            width: 300px;
+        }
+        #info-panel {
+            line-height: 17px;
+        }
+        .info-panel-logo {
+            display: block;
+            height: 90px;
+            margin: 0 auto;
+            width: 90px;
+        }
+        .info-panel-link {
+            text-decoration: none;
+        }
+        .info-panel-label {
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
     </style>
 </head>
 <body>
-<div id="gjs">
-    {!! $page->content !!}
+    <div style="display: none">
+        <div class="gjs-logo-cont">
+            <a href="https://grapesjs.com"><img class="gjs-logo" src="{{ asset('vendor/core/plugins/page-builder/images/grapesjs-logo-cl.png')}}"></a>
+            <div class="gjs-logo-version"></div>
+        </div>
+    </div>
+
+    <div id="gjs">
+        {!! $page->content !!}
+    </div>
+
+<div id="info-panel" style="display:none">
+    <br/>
+    <svg class="info-panel-logo" xmlns="https://www.w3.org/2000/svg" version="1"><g id="gjs-logo">
+        <path d="M40 5l-12.9 7.4 -12.9 7.4c-1.4 0.8-2.7 2.3-3.7 3.9 -0.9 1.6-1.5 3.5-1.5 5.1v14.9 14.9c0 1.7 0.6 3.5 1.5 5.1 0.9 1.6 2.2 3.1 3.7 3.9l12.9 7.4 12.9 7.4c1.4 0.8 3.3 1.2 5.2 1.2 1.9 0 3.8-0.4 5.2-1.2l12.9-7.4 12.9-7.4c1.4-0.8 2.7-2.2 3.7-3.9 0.9-1.6 1.5-3.5 1.5-5.1v-14.9 -12.7c0-4.6-3.8-6-6.8-4.2l-28 16.2" style="fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-width:10;stroke:#fff"/>
+    </g></svg>
+    <br/>
+    <div class="info-panel-label">
+        <b>The GrapesJS Webpage Builder</b> is one of the many plugins available for paid users of
+        <a class="info-panel-link gjs-four-color" target="_blank" href="https://codecanyon.net/item/martfury-multipurpose-laravel-ecommerce-system/29925223">Martfury</a> Multipurpose Marketplace Laravel Ecommerce System.
+        <br/><br/>
+        Other free plugins include:
+            <ul>
+                <li> <a class="info-panel-link gjs-four-color" target="_blank" href="https://github.com/botble/wordpress-importer">Wordpress Importer</a></li>
+                <li> <a class="info-panel-link gjs-four-color" target="_blank" href="https://github.com/botble/log-viewer">Log viewer</a></li>
+                <li> <a class="info-panel-link gjs-four-color" target="_blank" href="https://github.com/botble/maintenance-mode">Maintenance mode</a></li>
+                <li> <a class="info-panel-link gjs-four-color" target="_blank" href="https://github.com/botble/impersonate">Impersonate</a></li>
+                <li> <a class="info-panel-link gjs-four-color" target="_blank" href="https://github.com/botble/post-scheduler">Post scheduler</a></li>
+                <li> <a class="info-panel-link gjs-four-color" target="_blank" href="https://github.com/baoboine/botble-comment">Blog Comment</a></li>
+                <li> <a class="info-panel-link gjs-four-color" target="_blank" href="https://github.com/nivianh/toc">Table of Contents</a></li>
+            </ul>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"
@@ -575,6 +645,12 @@
     editor.on('load', function () {
         var $ = grapesjs.$;
 
+        // Show logo with the version
+        var logoCont = document.querySelector('.gjs-logo-cont');
+        document.querySelector('.gjs-logo-version').innerHTML = 'v' + grapesjs.version;
+        var logoPanel = document.querySelector('.gjs-pn-commands');
+        logoPanel.appendChild(logoCont);
+
         // Load and show settings and style manager
         var openTmBtn = pn.getButton('views', 'open-tm');
         openTmBtn && openTmBtn.set('active', 1);
@@ -618,6 +694,37 @@
         command: 'save-page',
         active: true
     });
+
+    // Add info command
+
+    var mdlClass = 'gjs-mdl-dialog-sm';
+    var infoContainer = document.getElementById('info-panel');
+    var cmdm = editor.Commands;
+    var modal = editor.Modal;
+        cmdm.add('open-info', function() {
+        var mdlDialog = document.querySelector('.gjs-mdl-dialog');
+        mdlDialog.className += ' ' + mdlClass;
+        infoContainer.style.display = 'block';
+        modal.setTitle('GrapesJS Page Builder');
+        modal.setContent(infoContainer);
+        modal.open();
+        modal.getModel().once('change:open', function() {
+        mdlDialog.className = mdlDialog.className.replace(mdlClass, '');
+        })
+    });
+
+    pn.addButton('options', {
+        id: 'open-info',
+        className: 'fa fa-question-circle',
+        command: function() {
+            editor.runCommand('open-info')
+        },
+        attributes: {
+        'title': 'About',
+        'data-tooltip-pos': 'bottom',
+        },
+    });
+
 </script>
 </body>
 </html>
