@@ -3,8 +3,9 @@ This is a plugin for Botble CMS so you have to purchase Botble CMS first to use 
 Purchase it here: [https://codecanyon.net/item/botble-cms-php-platform-based-on-laravel-framework/16928182](https://1.envato.market/LWRBY)
 
 # Installation
-- Download and copy source code into `/platform/plugins/page-builder`.
-- Go to Admin -> Plugins or run command `php artisan cms:plugin:activate page-builder` to activate this plugin.
+- Download and rename folder `page-builder-master` to `page-builder`.
+- Copy folder `page-builder` into `/platform/plugins`.
+- Go to Admin -> Plugins then activate plugin Page Builder.
 
 # Screenshots
 
